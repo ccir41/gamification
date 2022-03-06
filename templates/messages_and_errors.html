@@ -1,0 +1,13 @@
+{% if messages %}
+	{% for message in messages %}
+		{% if message.tags == 'error' %}
+			<button class="toastMessage d-none" name="danger">{{message}}</button>
+		{% elif message.tags == 'success' %}
+			<button class="toastMessage d-none" name="success">{{message}}</button>
+		{% elif message.tags == 'warning' %}
+			<button class="toastMessage d-none" name="warning">{{message}}</button>
+		{% else %}
+			<button class="toastMessage d-none" name="info">{{message}}</button>
+		{% endif %}
+	{% endfor %}
+{% endif %}
