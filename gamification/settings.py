@@ -40,10 +40,12 @@ INSTALLED_APPS = [
 
     # 3rd party apps
     'crispy_forms',
+    'ckeditor',
 
     # user defined apps
     'core',
     'user',
+    'game',
 ]
 
 AUTH_USER_MODEL = 'user.User'
