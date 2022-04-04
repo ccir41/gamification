@@ -8,35 +8,30 @@ from core.models import TimeStampModel
 from user.models import User
 
 
-class ProductCategory(TimeStampModel):
-    name = models.CharField(
-        max_length=128,
-        unique=True
-    )
-
-    def __str__(self):
-        return self.name
+class ProductCategoryChoice(models.TextChoices):
+    ELECTRONICS = 'ELECTRONICS', 'Electronics'
+    FURNITURE = 'FURNITURE', 'Furniture'
 
 
 class Product(TimeStampModel):
-    product_category = models.ForeignKey(
-        ProductCategory,
-        on_delete=models.CASCADE,
-        related_name='products'
+    product_category = models.CharField(
+        max_length=64,
+        choices=ProductCategoryChoice.choices,
+        default=ProductCategoryChoice.ELECTRONICS
     )
     name = models.CharField(max_length=255)
     description = RichTextField()
     image = models.ImageField(upload_to='Product/')
     price = models.DecimalField(
-        max_digits=5,
+        max_digits=9,
         decimal_places=2
     )
     min_price = models.DecimalField(
-        max_digits=5,
+        max_digits=9,
         decimal_places=2
     )
     max_price = models.DecimalField(
-        max_digits=5,
+        max_digits=9,
         decimal_places=2
     )
 
