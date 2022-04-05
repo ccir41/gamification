@@ -1,5 +1,43 @@
-{% extends './base.html' %}
+{% extends './base.html' %} 
+
+{% load static %}
+
 
 {% block content %}
-this is a game page
+    <div class="container mt-5 pt-5">
+        {% for question in page_obj %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <p>Product Name. {{question.name}}</p>
+                <p>Product Description. {{question.description|safe}}</p>
+                <p>Product Min Price. {{question.min_price}}</p>
+                <p>Product Max Price. {{question.max_price}}</p>
+                <input type="hidden" name="question_id" id="question_id" value="{{question.id}}">
+                <input type="number" name="user_answer" id="user_answer" value="">
+                <button class="btn btn-success mx-5" type="submit" id="formsubmit">Submit</button>
+            </form>
+        {% endfor %}
+    </div>
+
+<div class="container">
+  <div class="pagination-btns">
+    <ol class="pagination align-right mr-auto">
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link btn btn-success nav-buttons my-2" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+    {% else %}
+        <li class="page-item">
+            <button class="btn btn-danger nav-buttons my-2">Finish</button>
+        </li>
+    {% endif %}
+    </ol>
+    Question {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+    </div>
+</div>
+
 {% endblock content %}
+
+{% block extra_js %}
+
+{% endblock extra_js %}

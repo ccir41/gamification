@@ -45,6 +45,10 @@ class UserResponse(TimeStampModel):
         on_delete=models.CASCADE,
         related_name='user_response'
     )
+    question = models.ManyToManyField(
+        Product,
+        blank=True
+    )
     response = models.JSONField(
         blank=True,
         default=dict
@@ -52,3 +56,6 @@ class UserResponse(TimeStampModel):
 
     def __str__(self):
         return self.user.email
+    
+    class Meta:
+        ordering = ('-id', )

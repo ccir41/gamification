@@ -5,6 +5,6 @@
         {% include './messages_and_errors.html' %}
     </div>
     <div class="col-md-12">
-        <a href="{% url 'core:game' %}"><button class="btn btn-primary float-right">Play Game</button></a>
+        <a href="{% url 'core:game' quiz_id=quiz_id %}"><button class="btn btn-primary float-right">Play Game</button></a>
     </div>
 {% endblock content %}
