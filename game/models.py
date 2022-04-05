@@ -37,6 +37,10 @@ class Product(TimeStampModel):
 
     def __str__(self):
         return self.name
+    
+    @property
+    def avg_price(self):
+        return (self.min_price + self.max_price) / 2
 
 
 class UserResponse(TimeStampModel):

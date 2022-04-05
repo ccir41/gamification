@@ -18,7 +18,11 @@
                             <span><strong>Price Range: </strong></span><span>{{question.min_price}} - {{question.max_price}}</span>
                             <br/>
                             <input type="hidden" name="question_id" id="question_id" value="{{question.id}}"><br/>
-                            <input class="form-control" type="number" name="user_answer" id="user_answer" value="">
+                            <div class="slidecontainer">
+                                <input type="range" min="{{question.min_price}}" max="{{question.max_price}}" value="{{question.avg_price}}" class="slider" id="myRange">
+                                <p>Price: <span id="demo"></span></p>
+                            </div>
+                            <input class="form-control d-none" type="number" name="user_answer" id="user_answer" value="">
                             <br/>
                             <button class="btn btn-success float-right" type="submit">Submit</button>
                         </form>
@@ -43,3 +47,16 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value;
+    
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+      $('#user_answer').val(slider.value);
+    };
+</script>
+{% endblock extra_js %}

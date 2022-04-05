@@ -31,12 +31,13 @@ class HomeView(LoginRequiredMixin, View):
             queryset2 = Product.objects.filter(product_category=ProductCategoryChoice.ELECTRONICS)
             queryset = queryset1 | queryset2
         queryset = sorted(queryset, key=lambda L: random.random())[:10]
-        user_response = UserResponse.objects.create(
-            user=request.user
-        )
-        for qs in queryset:
-            user_response.question.add(qs)
-        return render(request, 'index.html', {'quiz_id': user_response.id})
+        # user_response = UserResponse.objects.create(
+        #     user=request.user
+        # )
+        # for qs in queryset:
+        #     user_response.question.add(qs)
+        # return render(request, 'index.html', {'quiz_id': user_response.id})
+        return render(request, 'index.html', {'quiz_id': 37})
 
 
 @login_required
@@ -100,3 +101,20 @@ def result_page(request, quiz_id):
     user_response.points_calculated = True
     user_response.save()
     return render(request, 'result.html', {'game_points': game_points, 'total_points': user_points, 'correct_guess': correct_guess})
+
+
+@login_required
+def analytics(request):
+    result = []
+    product_category = request.GET.get('product_category', None)
+    # if product_category:
+    #     user_response = UserResponse.objects.filter()
+    return render(request, 'analytics.html', {})
+
+
+"""
+product_name
+product_category
+correct_prediction_count
+price
+"""
