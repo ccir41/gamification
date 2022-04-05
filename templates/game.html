@@ -15,10 +15,8 @@
                             {% csrf_token %}
                             <h5 class="card-title">{{question.name}}</h5>
                             <p class="card-text">{{question.description|safe}}</p>
-                            <span><strong>Price Range: </strong></span><span>{{question.min_price}} - {{question.max_price}}</span>
-                            <br/>
                             <input type="hidden" name="question_id" id="question_id" value="{{question.id}}"><br/>
-                            <div class="slidecontainer">
+                            <div class="slidecontainer text-center">
                                 <input type="range" min="{{question.min_price}}" max="{{question.max_price}}" value="{{question.avg_price}}" class="slider" id="myRange">
                                 <p>Price: <span id="demo"></span></p>
                             </div>
