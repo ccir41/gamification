@@ -4,51 +4,54 @@
 
 
 {% block content %}
-    <div class="container mt-5 pt-5">
-        {% for question in page_obj %}
-            <form action="." method="post" id="quiz-form">
-                {% csrf_token %}
-                <p>Product Name. {{question.name}}</p>
-                <p>Product Description. {{question.description|safe}}</p>
-                <p>Product Min Price. {{question.min_price}}</p>
-                <p>Product Max Price. {{question.max_price}}</p>
-                <input type="hidden" name="question_id" id="question_id" value="{{question.id}}">
-                <input type="number" name="user_answer" id="user_answer" value="">
-                <br />
-                <button class="btn btn-success my-4" type="submit" id="formsubmit">Next</button>
-            </form>
-        {% endfor %}
+    <div class="container mt-2">
+        <div class="row">
+            <div class="offset-md-3 col-md-6">
+                {% for question in page_obj %}
+                <div class="card shadow mb-2">
+                    <img src="{{question.image.url}}" class="card-img-top img-fluid" alt="{{question.name}}">
+                    <div class="card-body">
+                        <form action="." method="post" id="quiz-form">
+                            {% csrf_token %}
+                            <h5 class="card-title">{{question.name}}</h5>
+                            <p class="card-text">{{question.description|safe}}</p>
+                            <span><strong>Price Range: </strong></span><span>{{question.min_price}} - {{question.max_price}}</span>
+                            <br/>
+                            <input type="hidden" name="question_id" id="question_id" value="{{question.id}}"><br/>
+                            <input class="form-control" type="number" name="user_answer" id="user_answer" value="">
+                            <br/>
+                            <button class="btn btn-success float-right" type="submit">Submit</button>
+                        </form>
+                    </div>
+                    <div class="pagination-btns p-2">
+                        <ol class="pagination text-center">
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link btn btn-success nav-buttons" href="?page={{ page_obj.next_page_number }}" id="nextPageLink">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <button class="btn btn-danger nav-buttons">Finish</button>
+                            </li>
+                        {% endif %}
+                        </ol>
+                        Question {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
-<div class="container">
-  <div class="pagination-btns">
-    <ol class="pagination align-right mr-auto">
-    {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link btn btn-success nav-buttons my-2 d-none" href="?page={{ page_obj.next_page_number }}" id="nextPageLink">Next</a>
-        </li>
-    {% else %}
-        <li class="page-item">
-            <button class="btn btn-danger nav-buttons my-2">Finish</button>
-        </li>
-    {% endif %}
-    </ol>
-    Question {{page_obj.number}} of {{page_obj.paginator.num_pages}}
-    </div>
-</div>
-
 {% endblock content %}
 
+{% comment %} 
 {% block extra_js %}
 <script>
     $('#quiz-form').on('submit', function(event){
         event.preventDefault();
         create_post();
+        $('#nextPageLink').trigger('click');
     });
-
-    function callNextPage() {
-        $("#quiz-form").trigger('click');
-    }
 
     function create_post() {
         $.ajax({
@@ -60,7 +63,6 @@
             },
             // handle a successful response
             success : function(json) {
-                callNextPage();
                 console.log("success"); // another sanity check
             },
             // handle a non-successful response
@@ -70,4 +72,4 @@
         });
     };
 </script>
-{% endblock extra_js %}
+{% endblock extra_js %} {% endcomment %}

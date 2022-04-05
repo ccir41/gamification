@@ -58,10 +58,11 @@ def take_quiz(request, quiz_id):
         user_answer = request.POST.get('user_answer')
         user_response.response[f'{question_id}'] = user_answer
         user_response.save()
-        response_data = {}
-        response_data['result'] = 'Response recorded!'
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
-        # return HttpResponseRedirect(request.session['previous_page'])
+        # response_data = {}
+        # response_data['result'] = 'Response recorded!'
+        # return HttpResponse(
+        #     json.dumps(response_data),
+        #     content_type="application/json"
+        # )
+        # messages.success(request, 'Response recorded!')
+        return HttpResponseRedirect(request.session['previous_page'])
