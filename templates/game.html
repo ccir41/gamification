@@ -31,7 +31,7 @@
                             </li>
                         {% else %}
                             <li class="page-item">
-                                <button class="btn btn-danger nav-buttons">Finish</button>
+                                <a href="{% url 'core:result' quiz_id=quiz_id %}"><button class="btn btn-danger nav-buttons">Finish</button></a>
                             </li>
                         {% endif %}
                         </ol>
@@ -43,33 +43,3 @@
         </div>
     </div>
 {% endblock content %}
-
-{% comment %} 
-{% block extra_js %}
-<script>
-    $('#quiz-form').on('submit', function(event){
-        event.preventDefault();
-        create_post();
-        $('#nextPageLink').trigger('click');
-    });
-
-    function create_post() {
-        $.ajax({
-            url : $("#quiz-form").attr('action'),
-            type : "POST",
-            data : {
-                question_id : $('#question_id').val(),
-                user_answer: $('#user_answer').val()
-            },
-            // handle a successful response
-            success : function(json) {
-                console.log("success"); // another sanity check
-            },
-            // handle a non-successful response
-            error : function(xhr,errmsg,err) {
-                console.log(err);
-            }
-        });
-    };
-</script>
-{% endblock extra_js %} {% endcomment %}

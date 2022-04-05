@@ -47,7 +47,7 @@ def take_quiz(request, quiz_id):
     paginator = Paginator(questions,1)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
-    context = {'questions': questions, 'page_obj': page_obj}
+    context = {'questions': questions, 'page_obj': page_obj, 'quiz_id': quiz_id}
 
     if request.method == 'GET':
         request.session['previous_page'] = request.path_info + "?page=" + request.GET.get("page", '1')
@@ -66,3 +66,8 @@ def take_quiz(request, quiz_id):
         # )
         # messages.success(request, 'Response recorded!')
         return HttpResponseRedirect(request.session['previous_page'])
+
+
+@login_required
+def result_page(request, quiz_id):
+    return render(request, 'result.html', {})
