@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 
 from .forms import SignInForm, SignUpForm
 
 
+@csrf_exempt
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -22,6 +24,7 @@ def signup(request):
     return render(request, 'user/signup.html', {'form': form})
 
 
+@csrf_exempt
 def login_request(request):
     if request.method == "POST":
         form = SignInForm(request.POST)

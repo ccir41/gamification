@@ -1,6 +1,7 @@
 import random
 import json
 
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,6 @@ from django.views import View
 
 from user.models import UserCategoryChoice
 from game.models import Product, ProductCategoryChoice, UserResponse
-
 
 
 class HomeView(LoginRequiredMixin, View):
@@ -70,4 +70,33 @@ def take_quiz(request, quiz_id):
 
 @login_required
 def result_page(request, quiz_id):
-    return render(request, 'result.html', {})
+    game_points = 0
+    correct_guess = 0
+    user_guess = None
+    price_margin = settings.PRICE_MARGIN
+    point = settings.POINT
+    user_response = UserResponse.objects.filter(id=quiz_id).first()
+    user_points = user_response.user.user_profile.points
+    response = user_response.response
+    questions = user_response.question.all()
+    
+    if user_response.points_calculated is False:
+        for question in questions:
+            question_id = question.id
+            price = float(question.price)
+            LR = price - price * price_margin/100
+            HR = price + price * price_margin/100
+            try:
+                user_guess = float(response[f"{question_id}"])
+            except:
+                pass
+            if user_guess:
+                if user_guess >= LR and user_guess <= HR:
+                    user_points = user_points + point
+                    game_points = game_points + point
+                    correct_guess = correct_guess + 1
+    user_response.user.user_profile.points = user_points
+    user_response.user.user_profile.save()
+    user_response.points_calculated = True
+    user_response.save()
+    return render(request, 'result.html', {'game_points': game_points, 'total_points': user_points, 'correct_guess': correct_guess})

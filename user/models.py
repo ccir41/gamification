@@ -33,6 +33,7 @@ class UserProfile(TimeStampModel):
         on_delete=models.CASCADE,
         related_name='user_profile'
     )
+    points = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.user.email

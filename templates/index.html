@@ -5,6 +5,25 @@
         {% include './messages_and_errors.html' %}
     </div>
     <div class="col-md-12">
-        <a href="{% url 'core:game' quiz_id=quiz_id %}"><button class="btn btn-primary float-right">Play Game</button></a>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Game Description</h5>
+                        <hr/>
+                        <p>
+                            A game has already created for you once you logged in. You can enter to the game by clicking on the link below.
+                            <br />
+                            <br />
+                            A card containing image of the product with name, description and price range will be shown. You will guess the 
+                            resonable price of the product with price range. On resonable price you will be awarded <strong>100</strong> points each on correct 
+                            prediction which can be <strong>Redeem</strong> as purchasing product.
+                        </p>
+                        <hr/>
+                        <a href="{% url 'core:game' quiz_id=quiz_id %}"><button class="btn btn-primary float-right">Play Game</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}

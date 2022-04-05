@@ -53,6 +53,7 @@ class UserResponse(TimeStampModel):
         blank=True,
         default=dict
     )
+    points_calculated = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.email
