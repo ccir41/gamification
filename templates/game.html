@@ -6,7 +6,7 @@
 {% block content %}
     <div class="container mt-5 pt-5">
         {% for question in page_obj %}
-            <form action="" method="post">
+            <form action="." method="post" id="quiz-form">
                 {% csrf_token %}
                 <p>Product Name. {{question.name}}</p>
                 <p>Product Description. {{question.description|safe}}</p>
@@ -14,7 +14,8 @@
                 <p>Product Max Price. {{question.max_price}}</p>
                 <input type="hidden" name="question_id" id="question_id" value="{{question.id}}">
                 <input type="number" name="user_answer" id="user_answer" value="">
-                <button class="btn btn-success mx-5" type="submit" id="formsubmit">Submit</button>
+                <br />
+                <button class="btn btn-success my-4" type="submit" id="formsubmit">Next</button>
             </form>
         {% endfor %}
     </div>
@@ -24,7 +25,7 @@
     <ol class="pagination align-right mr-auto">
     {% if page_obj.has_next %}
         <li class="page-item">
-            <a class="page-link btn btn-success nav-buttons my-2" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="page-link btn btn-success nav-buttons my-2 d-none" href="?page={{ page_obj.next_page_number }}" id="nextPageLink">Next</a>
         </li>
     {% else %}
         <li class="page-item">
@@ -39,5 +40,34 @@
 {% endblock content %}
 
 {% block extra_js %}
+<script>
+    $('#quiz-form').on('submit', function(event){
+        event.preventDefault();
+        create_post();
+    });
 
+    function callNextPage() {
+        $("#quiz-form").trigger('click');
+    }
+
+    function create_post() {
+        $.ajax({
+            url : $("#quiz-form").attr('action'),
+            type : "POST",
+            data : {
+                question_id : $('#question_id').val(),
+                user_answer: $('#user_answer').val()
+            },
+            // handle a successful response
+            success : function(json) {
+                callNextPage();
+                console.log("success"); // another sanity check
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(err);
+            }
+        });
+    };
+</script>
 {% endblock extra_js %}

@@ -1,9 +1,11 @@
 import random
+import json
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -37,7 +39,8 @@ class HomeView(LoginRequiredMixin, View):
         return render(request, 'index.html', {'quiz_id': user_response.id})
 
 
-@login_required()
+@login_required
+@csrf_exempt
 def take_quiz(request, quiz_id):
     user_response = UserResponse.objects.filter(id=quiz_id).first()
     questions = user_response.question.all()
@@ -55,4 +58,10 @@ def take_quiz(request, quiz_id):
         user_answer = request.POST.get('user_answer')
         user_response.response[f'{question_id}'] = user_answer
         user_response.save()
-        return HttpResponseRedirect(request.session['previous_page'])
+        response_data = {}
+        response_data['result'] = 'Response recorded!'
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+        # return HttpResponseRedirect(request.session['previous_page'])
