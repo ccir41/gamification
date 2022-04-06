@@ -1,7 +1,50 @@
 {% extends './base.html' %}
 
 {% block content %}
-<div class="container">
-    
+<div id="container" style="width: 75%;">
+    <canvas id="product-chart" data-url="{% url 'core:product-chart' %}"></canvas>
 </div>
 {% endblock content %}
+
+
+{% block extra_js %}
+<script>
+
+    $(function () {
+
+      var $productChart = $("#product-chart");
+      $.ajax({
+        url: $productChart.data("url"),
+        success: function (data) {
+
+          var ctx = $productChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Product',
+                backgroundColor: 'blue',
+                data: data.data
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Product Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+{% endblock extra_js %}
