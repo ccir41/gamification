@@ -105,66 +105,7 @@ def result_page(request, quiz_id):
 
 @login_required
 def analytics(request):
-    user_guess = None
-    result = []
-    product_category = request.GET.get('product_category', None)
-    user_response = UserResponse.objects.all()
-    respondent = len(user_response)
-    for ur in user_response:
-        resp = {}
-        if len(ur.response) > 0:
-            if product_category:
-                for question in ur.question.filter(product_category__iexact=product_category):
-                    resp['user_category'] = ur.user.what_best_describe_you
-                    resp['product_name'] = question.name
-                    resp['product_category'] = question.product_category
-                    resp['price'] = float(question.price)
-                    # resp['correct_prediction_count'] = 0
-                    
-                    price = float(question.price)
-                    LR = price - price * settings.PRICE_MARGIN / 100
-                    HR = price + price * settings.PRICE_MARGIN / 100
-
-                    try:
-                        user_guess = float(ur.response[f"{question.id}"])
-                    except:
-                        pass
-                    if user_guess:
-                        if user_guess >= LR and user_guess <= HR:
-                            resp['correct_prediction_count'] = 1
-                            result.append(resp)
-            else:
-                for question in ur.question.all():
-                    resp['user_category'] = ur.user.what_best_describe_you
-                    resp['product_name'] = question.name
-                    resp['product_category'] = question.product_category
-                    resp['price'] = float(question.price)
-                    # resp['correct_prediction_count'] = 0
-
-                    price = float(question.price)
-                    LR = price - price * settings.PRICE_MARGIN / 100
-                    HR = price + price * settings.PRICE_MARGIN / 100
-
-                    try:
-                        user_guess = float(ur.response[f"{question.id}"])
-                    except:
-                        pass
-                    if user_guess:
-                        if user_guess >= LR and user_guess <= HR:
-                            resp['correct_prediction_count'] = 1
-                            result.append(resp)
-    keys = []
-    analytics_data = {}
-    for res in result:
-        product_name = res['product_name']
-        if product_name not in keys:
-            keys.append(product_name)
-            analytics_data[f"{product_name}"] = res
-        else:
-            count = analytics_data[f"{product_name}"][f"correct_prediction_count"] + 1
-            analytics_data[f"{product_name}"][f"correct_prediction_count"] = count
-    # print(analytics_data)
-    return render(request, 'analytics.html', {'result': result})
+    return render(request, 'analytics.html', {})
 
 
 def product_chart(request):
